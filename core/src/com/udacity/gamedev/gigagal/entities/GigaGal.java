@@ -34,11 +34,11 @@ public class GigaGal {
     private int lives;
 
     private long lastBulletTime;
-    private boolean isShooting;
 
     public boolean jumpButtonPressed;
     public boolean leftButtonPressed;
     public boolean rightButtonPressed;
+    public boolean shootButtonPressed;
 
     public GigaGal(Vector2 spawnLocation, Level level) {
         this.spawnLocation = spawnLocation;
@@ -67,7 +67,7 @@ public class GigaGal {
         facing = Direction.RIGHT;
         walkState = Enums.WalkState.NOT_WALKING;
         lastBulletTime = 0;
-        isShooting = false;
+        shootButtonPressed = false;
 
     }
 
@@ -143,7 +143,7 @@ public class GigaGal {
                 }
             }
         }
-        if (walkState.equals(WalkState.NOT_WALKING) && isShooting && canShoot()) {
+        if (walkState.equals(WalkState.NOT_WALKING) && shootButtonPressed && canShoot()) {
             if (jumpState.equals(JumpState.GROUNDED)) {
                 if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
                 else position.x += Constants.BULLET_KICK;
@@ -168,37 +168,40 @@ public class GigaGal {
             endJump();
         }
         // Shoot
-        boolean shootKeyPressed = Gdx.input.isKeyPressed(Keys.X);
-        isShooting = shootKeyPressed;
-        if (isShooting)
+        if (!shootButtonPressed) shootButtonPressed = Gdx.input.isKeyPressed(Keys.X);
+        if (shootButtonPressed)
             Assets.instance.gigaGalAssets.setAnimationSpeed(Constants.BULLET_MOVESPEED_MODIFIER);
         else Assets.instance.gigaGalAssets.setAnimationSpeed(0);
 
-        if (shootKeyPressed) {
-            shoot();
+        if (shootButtonPressed) {
+            if (canShoot()) {
+                shoot();
+            }
         }
+    }
+
+    public void updateShoot(boolean isShootTriggered) {
+
     }
 
     /**
      * @return true if shoot successful false otherwise
      */
-    public void shoot() {
-        if (canShoot()) {
-            Vector2 bulletPosition;
-            if (facing == Direction.RIGHT) {
-                bulletPosition = new Vector2(
-                        position.x + Constants.GIGAGAL_CANNON_OFFSET.x,
-                        position.y + Constants.GIGAGAL_CANNON_OFFSET.y
-                );
-            } else {
-                bulletPosition = new Vector2(
-                        position.x - Constants.GIGAGAL_CANNON_OFFSET.x,
-                        position.y + Constants.GIGAGAL_CANNON_OFFSET.y
-                );
-            }
-            level.spawnBullet(bulletPosition, facing);
-            lastBulletTime = TimeUtils.nanoTime();
+    private void shoot() {
+        Vector2 bulletPosition;
+        if (facing == Direction.RIGHT) {
+            bulletPosition = new Vector2(
+                    position.x + Constants.GIGAGAL_CANNON_OFFSET.x,
+                    position.y + Constants.GIGAGAL_CANNON_OFFSET.y
+            );
+        } else {
+            bulletPosition = new Vector2(
+                    position.x - Constants.GIGAGAL_CANNON_OFFSET.x,
+                    position.y + Constants.GIGAGAL_CANNON_OFFSET.y
+            );
         }
+        level.spawnBullet(bulletPosition, facing);
+        lastBulletTime = TimeUtils.nanoTime();
     }
 
     private boolean canShoot() {
@@ -236,7 +239,7 @@ public class GigaGal {
 
     private float bulletPushBack(float delta) {
         float gigagalMoveSpeed = Constants.GIGAGAL_MOVE_SPEED;
-        if (isShooting) gigagalMoveSpeed -= gigagalMoveSpeed * Constants.BULLET_MOVESPEED_MODIFIER;
+        if (shootButtonPressed) gigagalMoveSpeed -= gigagalMoveSpeed * Constants.BULLET_MOVESPEED_MODIFIER;
         return delta * gigagalMoveSpeed;
     }
 

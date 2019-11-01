@@ -7,11 +7,12 @@ public class Constants {
 
     // World/Camera
     public static final Color BACKGROUND_COLOR = Color.SKY;
-    public static final float WORLD_SIZE = 160;
+    public static final float WORLD_SIZE = 180;
     public static final float KILL_PLANE = -200;
     public static final float GRAVITY = 10;
     public static final float CHASE_CAM_MOVE_SPEED = WORLD_SIZE;
     public static final float CHASE_CAM_DIRECTION_OFFSET = WORLD_SIZE / 16;
+    public static final float CHASE_CAM_SHAKE = WORLD_SIZE/8;
     public static final String TEXTURE_ATLAS = "images/gigagal.pack.atlas";
 
     // GigaGal

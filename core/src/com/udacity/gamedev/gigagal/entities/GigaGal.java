@@ -40,7 +40,7 @@ public class GigaGal {
     public boolean rightButtonPressed;
     public boolean shootButtonPressed;
 
-    private boolean isShooting;
+    public boolean isShooting;
 
     public GigaGal(Vector2 spawnLocation, Level level) {
         this.spawnLocation = spawnLocation;

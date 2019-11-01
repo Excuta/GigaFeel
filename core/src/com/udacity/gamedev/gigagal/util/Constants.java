@@ -11,6 +11,7 @@ public class Constants {
     public static final float KILL_PLANE = -200;
     public static final float GRAVITY = 10;
     public static final float CHASE_CAM_MOVE_SPEED = WORLD_SIZE;
+    public static final float CHASE_CAM_DIRECTION_OFFSET = WORLD_SIZE / 16;
     public static final String TEXTURE_ATLAS = "images/gigagal.pack.atlas";
 
     // GigaGal
@@ -58,6 +59,7 @@ public class Constants {
     public static final float BULLET_MOVE_SPEED = 350;
     public static final Vector2 BULLET_CENTER = new Vector2(3, 2);
     public static final float BULLET_KICK = 0.5f;
+    public static final float BULLET_MOVESPEED_MODIFIER = Constants.GIGAGAL_FIRERATE * Constants.BULLET_KICK / 3f;
 
     // Explosion
     public static final String EXPLOSION_LARGE = "explosion-large";
@@ -113,8 +115,8 @@ public class Constants {
     public static final float LEVEL_END_DURATION = 5;
     public static final String VICTORY_MESSAGE = "You are the Winrar!";
     public static final String GAME_OVER_MESSAGE = "Game Over, Gal";
-    public static final int EXPLOSION_COUNT =500;
-    public static final int ENEMY_COUNT =200;
+    public static final int EXPLOSION_COUNT = 500;
+    public static final int ENEMY_COUNT = 200;
     public static final String FONT_FILE = "font/header.fnt";
 
     // Scoring

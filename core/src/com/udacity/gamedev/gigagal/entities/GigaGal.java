@@ -34,6 +34,7 @@ public class GigaGal {
     private int lives;
 
     private long lastBulletTime;
+    private boolean isShooting;
 
     public boolean jumpButtonPressed;
     public boolean leftButtonPressed;
@@ -66,6 +67,7 @@ public class GigaGal {
         facing = Direction.RIGHT;
         walkState = Enums.WalkState.NOT_WALKING;
         lastBulletTime = 0;
+        isShooting = false;
 
     }
 
@@ -125,7 +127,18 @@ public class GigaGal {
                 }
             }
         }
-
+        // Shoot
+        boolean didShoot = false;
+        boolean shootKeyPressed = Gdx.input.isKeyPressed(Keys.X);
+        isShooting = shootKeyPressed;
+        if (shootKeyPressed) {
+            didShoot = shoot();
+        }
+        // TODO: 11/1/2019 possible bug, offset with movespeed decrease
+        if (didShoot) {
+            if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
+            else position.x += Constants.BULLET_KICK;
+        }
 
         // Move left/right
         if (jumpState != JumpState.RECOILING) {
@@ -134,9 +147,9 @@ public class GigaGal {
             boolean right = Gdx.input.isKeyPressed(Keys.RIGHT) || rightButtonPressed;
 
             if (left && !right) {
-                moveLeft(delta);
+                move(Direction.LEFT, delta, didShoot);
             } else if (right && !left) {
-                moveRight(delta);
+                move(Direction.RIGHT, delta, didShoot);
             } else {
                 walkState = Enums.WalkState.NOT_WALKING;
             }
@@ -153,16 +166,6 @@ public class GigaGal {
             }
         } else {
             endJump();
-        }
-
-        boolean didShoot = false;
-        // Shoot
-        if (Gdx.input.isKeyPressed(Keys.X)) {
-            didShoot = shoot();
-        }
-        if (didShoot) {
-            if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
-            else position.x += Constants.BULLET_KICK;
         }
     }
 
@@ -212,23 +215,21 @@ public class GigaGal {
         return leftFootIn || rightFootIn || straddle;
     }
 
-
-    private void moveLeft(float delta) {
+    private void move(Direction direction, float delta, boolean didShoot) {
         if (jumpState == Enums.JumpState.GROUNDED && walkState != Enums.WalkState.WALKING) {
             walkStartTime = TimeUtils.nanoTime();
         }
         walkState = Enums.WalkState.WALKING;
-        facing = Direction.LEFT;
-        position.x -= delta * Constants.GIGAGAL_MOVE_SPEED;
+        facing = direction;
+        float xDiff = bulletPushBack(delta);
+        if (direction.equals(Direction.RIGHT)) position.x += xDiff;
+        else position.x -= xDiff;
     }
 
-    private void moveRight(float delta) {
-        if (jumpState == Enums.JumpState.GROUNDED && walkState != Enums.WalkState.WALKING) {
-            walkStartTime = TimeUtils.nanoTime();
-        }
-        walkState = Enums.WalkState.WALKING;
-        facing = Direction.RIGHT;
-        position.x += delta * Constants.GIGAGAL_MOVE_SPEED;
+    private float bulletPushBack(float delta) {
+        float gigagalMoveSpeed = Constants.GIGAGAL_MOVE_SPEED;
+        if (isShooting)gigagalMoveSpeed /= Constants.BULLET_MOVESPEED_MODIFIER;
+        return delta * gigagalMoveSpeed;
     }
 
     private void startJump() {
@@ -288,4 +289,7 @@ public class GigaGal {
 
     }
 
+    public Direction getFacing() {
+        return facing;
+    }
 }

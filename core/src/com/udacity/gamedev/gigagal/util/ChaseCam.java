@@ -14,6 +14,8 @@ public class ChaseCam {
     public GigaGal target;
     private Boolean following;
 
+    private Enums.Direction lastFrameDirection;
+
     public ChaseCam() {
         following = true;
     }
@@ -26,7 +28,13 @@ public class ChaseCam {
         }
 
         if (following) {
-            camera.position.x = target.getPosition().x;
+            if (target.getFacing().equals(Enums.Direction.RIGHT)) {
+                camera.position.x = target.getPosition().x + Constants.CHASE_CAM_DIRECTION_OFFSET;
+                lastFrameDirection = Enums.Direction.RIGHT;
+            } else {
+                camera.position.x = target.getPosition().x - Constants.CHASE_CAM_DIRECTION_OFFSET;
+                lastFrameDirection = Enums.Direction.LEFT;
+            }
             camera.position.y = target.getPosition().y;
         } else {
             if (Gdx.input.isKeyPressed(Keys.A)) {

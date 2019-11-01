@@ -96,6 +96,11 @@ public class Assets implements Disposable, AssetErrorListener {
             walkingRightFrames.add(atlas.findRegion(Constants.WALKING_RIGHT_3));
             walkingRightAnimation = new Animation(Constants.WALK_LOOP_DURATION, walkingRightFrames, PlayMode.LOOP);
         }
+
+        public void setAnimationSpeed(float modifier) {
+            walkingLeftAnimation.setFrameDuration(Constants.WALK_LOOP_DURATION / modifier);
+            walkingRightAnimation.setFrameDuration(Constants.WALK_LOOP_DURATION / modifier);
+        }
     }
 
     public class PlatformAssets {

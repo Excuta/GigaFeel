@@ -131,6 +131,10 @@ public class GigaGal {
         boolean didShoot = false;
         boolean shootKeyPressed = Gdx.input.isKeyPressed(Keys.X);
         isShooting = shootKeyPressed;
+        if (isShooting)
+            Assets.instance.gigaGalAssets.setAnimationSpeed(Constants.BULLET_MOVESPEED_MODIFIER);
+        else Assets.instance.gigaGalAssets.setAnimationSpeed(1);
+
         if (shootKeyPressed) {
             didShoot = shoot();
         }
@@ -147,9 +151,9 @@ public class GigaGal {
             boolean right = Gdx.input.isKeyPressed(Keys.RIGHT) || rightButtonPressed;
 
             if (left && !right) {
-                move(Direction.LEFT, delta, didShoot);
+                move(Direction.LEFT, delta);
             } else if (right && !left) {
-                move(Direction.RIGHT, delta, didShoot);
+                move(Direction.RIGHT, delta);
             } else {
                 walkState = Enums.WalkState.NOT_WALKING;
             }
@@ -215,7 +219,7 @@ public class GigaGal {
         return leftFootIn || rightFootIn || straddle;
     }
 
-    private void move(Direction direction, float delta, boolean didShoot) {
+    private void move(Direction direction, float delta) {
         if (jumpState == Enums.JumpState.GROUNDED && walkState != Enums.WalkState.WALKING) {
             walkStartTime = TimeUtils.nanoTime();
         }
@@ -228,7 +232,7 @@ public class GigaGal {
 
     private float bulletPushBack(float delta) {
         float gigagalMoveSpeed = Constants.GIGAGAL_MOVE_SPEED;
-        if (isShooting)gigagalMoveSpeed /= Constants.BULLET_MOVESPEED_MODIFIER;
+        if (isShooting) gigagalMoveSpeed *= Constants.BULLET_MOVESPEED_MODIFIER;
         return delta * gigagalMoveSpeed;
     }
 

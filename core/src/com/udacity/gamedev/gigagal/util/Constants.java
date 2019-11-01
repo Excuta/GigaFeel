@@ -59,7 +59,7 @@ public class Constants {
     public static final float BULLET_MOVE_SPEED = 350;
     public static final Vector2 BULLET_CENTER = new Vector2(3, 2);
     public static final float BULLET_KICK = 0.5f;
-    public static final float BULLET_MOVESPEED_MODIFIER = Constants.GIGAGAL_FIRERATE * Constants.BULLET_KICK / 3f;
+    public static final float BULLET_MOVESPEED_MODIFIER = 3f/Constants.GIGAGAL_FIRERATE * Constants.BULLET_KICK;
 
     // Explosion
     public static final String EXPLOSION_LARGE = "explosion-large";

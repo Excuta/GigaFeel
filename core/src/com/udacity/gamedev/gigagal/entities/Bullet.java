@@ -12,12 +12,12 @@ import com.udacity.gamedev.gigagal.util.Utils;
 public class Bullet {
 
     private final Direction direction;
-    private int ySpeed;
+    private float ySpeed;
     private final Level level;
     public boolean active;
     private Vector2 position;
 
-    public Bullet(Level level, Vector2 position, Direction direction, int ySpeed) {
+    public Bullet(Level level, Vector2 position, Direction direction, float ySpeed) {
         this.level = level;
         this.position = position;
         this.direction = direction;

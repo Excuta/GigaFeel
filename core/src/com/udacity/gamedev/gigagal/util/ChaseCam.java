@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.udacity.gamedev.gigagal.entities.GigaGal;
 
@@ -15,11 +16,11 @@ public class ChaseCam {
     public Camera camera;
     public GigaGal target;
     private Boolean following;
-
-    private Enums.Direction lastFrameDirection;
+    private Vector2 velocity;
 
     public ChaseCam() {
         following = true;
+        velocity = new Vector2();
     }
 
 
@@ -37,17 +38,38 @@ public class ChaseCam {
     }
 
     private void followTarget(float delta) {
+        float xDestination;
         if (target.getFacing().equals(Enums.Direction.RIGHT)) {
-            camera.position.x = target.getPosition().x + Constants.CHASE_CAM_DIRECTION_OFFSET;
-            lastFrameDirection = Enums.Direction.RIGHT;
+            xDestination = target.getPosition().x + Constants.CHASE_CAM_DIRECTION_OFFSET;
         } else {
-            camera.position.x = target.getPosition().x - Constants.CHASE_CAM_DIRECTION_OFFSET;
-            lastFrameDirection = Enums.Direction.LEFT;
+            xDestination = target.getPosition().x - Constants.CHASE_CAM_DIRECTION_OFFSET;
         }
+        updateVelocity(xDestination);
+        float changeX = velocity.x * delta;
+        if (Math.abs(camera.position.x - xDestination) <= Math.abs(changeX)) {
+            camera.position.x = xDestination;
+        } else camera.position.x += changeX;
         camera.position.y = target.getPosition().y;
         camera.position.z = 0;
         if (target.isShooting) {
             shake(delta);
+        }
+    }
+
+    private void updateVelocity(float xDestination) {
+        float changeVelocity = Constants.CHASE_CAM_ACCELERATION;
+        if (xDestination > camera.position.x) {
+            velocity.x += changeVelocity;
+            if (velocity.x > Constants.CHASE_CAM_MAX_SPEED) {
+                velocity.x = Constants.CHASE_CAM_MAX_SPEED;
+            }
+            if (camera.position.x >= xDestination) camera.position.x = xDestination;
+        } else if (xDestination < camera.position.x) {
+            velocity.x -= changeVelocity;
+            if (velocity.x < -1 * Constants.CHASE_CAM_MAX_SPEED) {
+                velocity.x = -1 * Constants.CHASE_CAM_MAX_SPEED;
+            }
+            if (camera.position.x <= xDestination) camera.position.x = xDestination;
         }
     }
 

@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.udacity.gamedev.gigagal.Level;
 import com.udacity.gamedev.gigagal.util.Assets;
@@ -31,8 +31,9 @@ public class GigaGal {
     private WalkState walkState;
     private long walkStartTime;
     private long jumpStartTime;
-    private int ammo;
     private int lives;
+
+    private long lastBulletTime;
 
     public boolean jumpButtonPressed;
     public boolean leftButtonPressed;
@@ -47,16 +48,12 @@ public class GigaGal {
         init();
     }
 
-    public int getAmmo() {
-        return ammo;
-    }
 
     public int getLives() {
         return lives;
     }
 
     public void init() {
-        ammo = Constants.INITIAL_AMMO;
         lives = Constants.INITIAL_LIVES;
         respawn();
     }
@@ -68,6 +65,7 @@ public class GigaGal {
         jumpState = Enums.JumpState.FALLING;
         facing = Direction.RIGHT;
         walkState = Enums.WalkState.NOT_WALKING;
+        lastBulletTime = 0;
 
     }
 
@@ -129,7 +127,6 @@ public class GigaGal {
         }
 
 
-
         // Move left/right
         if (jumpState != JumpState.RECOILING) {
 
@@ -158,39 +155,24 @@ public class GigaGal {
             endJump();
         }
 
-        // Check powerups
-        DelayedRemovalArray<Powerup> powerups = level.getPowerups();
-        powerups.begin();
-        for (int i = 0; i < powerups.size; i++) {
-            Powerup powerup = powerups.get(i);
-            Rectangle powerupBounds = new Rectangle(
-                    powerup.position.x - Constants.POWERUP_CENTER.x,
-                    powerup.position.y - Constants.POWERUP_CENTER.y,
-                    Assets.instance.powerupAssets.powerup.getRegionWidth(),
-                    Assets.instance.powerupAssets.powerup.getRegionHeight()
-            );
-            if (gigaGalBounds.overlaps(powerupBounds)) {
-                ammo += Constants.POWERUP_AMMO;
-                level.score += Constants.POWERUP_SCORE;
-                powerups.removeIndex(i);
-            }
-        }
-        powerups.end();
-
+        boolean didShoot = false;
         // Shoot
-        if (Gdx.input.isKeyJustPressed(Keys.X)) {
-            shoot();
+        if (Gdx.input.isKeyPressed(Keys.X)) {
+            didShoot = shoot();
+        }
+        if (didShoot) {
+            if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
+            else position.x += Constants.BULLET_KICK;
         }
     }
 
-
-
-    public void shoot() {
-        if (ammo > 0) {
-
-            ammo--;
+    /**
+     * @return true if shoot successful false otherwise
+     */
+    public boolean shoot() {
+        boolean canShoot = canShoot();
+        if (canShoot) {
             Vector2 bulletPosition;
-
             if (facing == Direction.RIGHT) {
                 bulletPosition = new Vector2(
                         position.x + Constants.GIGAGAL_CANNON_OFFSET.x,
@@ -203,7 +185,13 @@ public class GigaGal {
                 );
             }
             level.spawnBullet(bulletPosition, facing);
+            lastBulletTime = TimeUtils.nanoTime();
         }
+        return canShoot;
+    }
+
+    private boolean canShoot() {
+        return (MathUtils.nanoToSec * (TimeUtils.nanoTime() - lastBulletTime)) > (1.0 / Constants.GIGAGAL_FIRERATE);
     }
 
     boolean landedOnPlatform(Platform platform) {

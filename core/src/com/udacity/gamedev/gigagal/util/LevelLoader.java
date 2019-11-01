@@ -69,9 +69,9 @@ public class LevelLoader {
             final Vector2 imagePosition = extractXY(item);
 
             if (item.get(Constants.LEVEL_IMAGENAME_KEY).equals(Constants.POWERUP_SPRITE)) {
-                final Vector2 powerupPosition = imagePosition.add(Constants.POWERUP_CENTER);
-                Gdx.app.log(TAG, "Loaded a powerup at " + powerupPosition);
-                level.getPowerups().add(new Powerup(powerupPosition));
+//                final Vector2 powerupPosition = imagePosition.add(Constants.POWERUP_CENTER);
+//                Gdx.app.log(TAG, "Loaded a powerup at " + powerupPosition);
+//                level.getPowerups().add(new Powerup(powerupPosition));
             } else if (item.get(Constants.LEVEL_IMAGENAME_KEY).equals(Constants.STANDING_RIGHT)) {
                 final Vector2 gigaGalPosition = imagePosition.add(Constants.GIGAGAL_EYE_POSITION);
                 Gdx.app.log(TAG, "Loaded GigaGal at " + gigaGalPosition);

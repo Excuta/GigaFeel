@@ -20,11 +20,11 @@ public class Constants {
     public static final Vector2 GIGAGAL_CANNON_OFFSET = new Vector2(12, -7);
     public static final float GIGAGAL_HEIGHT = 23.0f;
     public static final float GIGAGAL_MOVE_SPEED = 100;
+    public static final int GIGAGAL_FIRERATE = 10;
 
     public static final float JUMP_SPEED = 200;
     public static final Vector2 KNOCKBACK_VELOCITY = new Vector2(200, 200);
     public static final float MAX_JUMP_DURATION = .1f;
-    public static final int INITIAL_AMMO = 10;
     public static final int INITIAL_LIVES = 3;
 
     public static final String STANDING_RIGHT = "standing-right";
@@ -55,20 +55,20 @@ public class Constants {
 
     // Bullet
     public static final String BULLET_SPRITE = "bullet";
-    public static final float BULLET_MOVE_SPEED = 150;
+    public static final float BULLET_MOVE_SPEED = 350;
     public static final Vector2 BULLET_CENTER = new Vector2(3, 2);
+    public static final float BULLET_KICK = 0.5f;
 
     // Explosion
     public static final String EXPLOSION_LARGE = "explosion-large";
     public static final String EXPLOSION_MEDIUM = "explosion-medium";
     public static final String EXPLOSION_SMALL = "explosion-small";
     public static final Vector2 EXPLOSION_CENTER = new Vector2(8, 8);
-    public static final float EXPLOSION_DURATION = 0.5f;
+    public static final float EXPLOSION_DURATION = 0.25f;
 
     // Powerup
     public static final String POWERUP_SPRITE = "powerup";
     public static final Vector2 POWERUP_CENTER = new Vector2(7, 5);
-    public static final int POWERUP_AMMO = 10;
 
     // Exit Portal
     public static final String EXIT_PORTAL_SPRITE_1 = "exit-portal-1";
@@ -98,7 +98,6 @@ public class Constants {
     // HUD
     public static final float HUD_VIEWPORT_SIZE = 480;
     public static final float HUD_MARGIN = 20;
-    public static final String HUD_AMMO_LABEL = "Ammo: ";
     public static final String HUD_SCORE_LABEL = "Score: ";
 
     // Onscreen Controls
@@ -121,6 +120,4 @@ public class Constants {
     // Scoring
     public static final int ENEMY_KILL_SCORE = 100;
     public static final int ENEMY_HIT_SCORE = 25;
-    public static final int POWERUP_SCORE = 50;
-
 }

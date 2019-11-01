@@ -41,7 +41,7 @@ public class Bullet {
                 level.spawnExplosion(position);
                 active = false;
                 enemy.health -= 1;
-                level.enemyHit(enemy);
+                level.enemyHit(enemy, delta);
                 level.score += Constants.ENEMY_HIT_SCORE;
             }
         }

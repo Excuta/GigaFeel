@@ -208,11 +208,13 @@ public class Level {
         explosions.add(new Explosion(position));
     }
 
-    public void enemyHit(Enemy enemy) {
+    public void enemyHit(Enemy enemy, float delta) {
+        Direction hitDirection;
         if (enemy.position.x > gigaGal.getPosition().x) {
-            enemy.position.x += Constants.BULLET_KICK * Constants.ENEMY_KICKBACK_MODIFIER;
+            hitDirection = Direction.LEFT;
         } else {
-            enemy.position.x -= Constants.BULLET_KICK * Constants.ENEMY_KICKBACK_MODIFIER;
+            hitDirection = Direction.RIGHT;
         }
+        enemy.updateHitFrom(hitDirection, delta);
     }
 }

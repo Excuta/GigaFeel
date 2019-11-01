@@ -55,4 +55,10 @@ public class Enemy {
         final TextureRegion region = Assets.instance.enemyAssets.enemy;
         Utils.drawTextureRegion(batch, region, position, Constants.ENEMY_CENTER);
     }
+
+    public void updateHitFrom(Direction hitDirection, float delta) {
+        float bulletKickX = delta * Constants.BULLET_KICK * Constants.ENEMY_KICKBACK_MODIFIER;
+        if (hitDirection.equals(Direction.LEFT)) position.x += bulletKickX;
+        else if (hitDirection.equals(Direction.RIGHT)) position.x -= bulletKickX;
+    }
 }

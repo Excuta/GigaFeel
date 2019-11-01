@@ -40,6 +40,8 @@ public class GigaGal {
     public boolean rightButtonPressed;
     public boolean shootButtonPressed;
 
+    private boolean isShooting;
+
     public GigaGal(Vector2 spawnLocation, Level level) {
         this.spawnLocation = spawnLocation;
         this.level = level;
@@ -76,35 +78,83 @@ public class GigaGal {
     }
 
     public void update(float delta, Array<Platform> platforms) {
-
         lastFramePosition.set(position);
         velocity.y -= Constants.GRAVITY;
         position.mulAdd(velocity, delta);
 
         if (position.y < Constants.KILL_PLANE) {
-            lives--;
-            if (lives > -1) {
-                respawn();
-            }
+            die();
         }
 
-        // Land on/fall off platforms
-        if (jumpState != Enums.JumpState.JUMPING) {
-            if (jumpState != JumpState.RECOILING) {
-                jumpState = Enums.JumpState.FALLING;
-            }
+        updateFalling(platforms);
+        updateEnemyCollision();
+        updateMove(delta);
+        updateJump();
+        updateShooting(delta);
+    }
 
-            for (Platform platform : platforms) {
-                if (landedOnPlatform(platform)) {
-                    jumpState = Enums.JumpState.GROUNDED;
-                    velocity.y = 0;
-                    velocity.x = 0;
-                    position.y = platform.top + Constants.GIGAGAL_EYE_HEIGHT;
+    private void updateShooting(float delta) {
+        isShooting = Gdx.input.isKeyPressed(Keys.X) || shootButtonPressed;
+        updateWalkingAnimationSpeed();
+        if (isShooting && canShoot()) {
+            shoot();
+            bulletKickBack(delta);
+        }
+    }
+
+    private void updateWalkingAnimationSpeed() {
+        if (isShooting) {
+            Assets.instance.gigaGalAssets.setAnimationSpeed(Constants.BULLET_KICK / Constants.GIGAGAL_MOVE_SPEED);
+        } else Assets.instance.gigaGalAssets.setAnimationSpeed(0);
+    }
+
+    private void updateJump() {
+        if (Gdx.input.isKeyPressed(Keys.Z) || jumpButtonPressed) {
+            switch (jumpState) {
+                case GROUNDED:
+                    startJump();
+                    break;
+                case JUMPING:
+                    continueJump();
+            }
+        } else {
+            endJump();
+        }
+    }
+
+    private void bulletKickBack(float delta) {
+        if (walkState.equals(WalkState.NOT_WALKING)) {
+            float bulletKickX = delta * Constants.BULLET_KICK;
+            if (jumpState.equals(JumpState.GROUNDED)) {
+                if (facing.equals(Direction.RIGHT)) position.x -= bulletKickX;
+                else position.x += bulletKickX;
+            } else {
+                if (facing.equals(Direction.RIGHT)) {
+                    velocity.x -= bulletKickX;
+                } else {
+                    velocity.x += bulletKickX;
                 }
             }
         }
+    }
 
-        // Collide with enemies
+    private void updateMove(float delta) {
+        if (jumpState != JumpState.RECOILING) {
+
+            boolean left = Gdx.input.isKeyPressed(Keys.LEFT) || leftButtonPressed;
+            boolean right = Gdx.input.isKeyPressed(Keys.RIGHT) || rightButtonPressed;
+            if (left && !right) {
+                move(Direction.LEFT, delta);
+            } else if (right && !left) {
+                move(Direction.RIGHT, delta);
+            } else {
+                walkState = WalkState.NOT_WALKING;
+            }
+
+        }
+    }
+
+    private void updateEnemyCollision() {
         Rectangle gigaGalBounds = new Rectangle(
                 position.x - Constants.GIGAGAL_STANCE_WIDTH / 2,
                 position.y - Constants.GIGAGAL_EYE_HEIGHT,
@@ -127,61 +177,30 @@ public class GigaGal {
                 }
             }
         }
+    }
 
-        // Move left/right
-        if (jumpState != JumpState.RECOILING) {
-
-            boolean left = Gdx.input.isKeyPressed(Keys.LEFT) || leftButtonPressed;
-            boolean right = Gdx.input.isKeyPressed(Keys.RIGHT) || rightButtonPressed;
-            if (jumpState.equals(JumpState.GROUNDED)) {
-                if (left && !right) {
-                    move(Direction.LEFT, delta);
-                } else if (right && !left) {
-                    move(Direction.RIGHT, delta);
-                } else {
-                    walkState = Enums.WalkState.NOT_WALKING;
-                }
-            }
-        }
-        if (walkState.equals(WalkState.NOT_WALKING) && shootButtonPressed && canShoot()) {
-            if (jumpState.equals(JumpState.GROUNDED)) {
-                if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
-                else position.x += Constants.BULLET_KICK;
-            } else {
-                if (facing.equals(Direction.RIGHT)) {
-                    velocity.x -= Constants.BULLET_KICK;
-                } else {
-                    velocity.x += Constants.BULLET_KICK;
-                }
-            }
-        }
-        // Jump
-        if (Gdx.input.isKeyPressed(Keys.Z) || jumpButtonPressed) {
-            switch (jumpState) {
-                case GROUNDED:
-                    startJump();
-                    break;
-                case JUMPING:
-                    continueJump();
-            }
-        } else {
-            endJump();
-        }
-        // Shoot
-        if (!shootButtonPressed) shootButtonPressed = Gdx.input.isKeyPressed(Keys.X);
-        if (shootButtonPressed)
-            Assets.instance.gigaGalAssets.setAnimationSpeed(Constants.BULLET_MOVESPEED_MODIFIER);
-        else Assets.instance.gigaGalAssets.setAnimationSpeed(0);
-
-        if (shootButtonPressed) {
-            if (canShoot()) {
-                shoot();
-            }
+    private void die() {
+        lives--;
+        if (lives > -1) {
+            respawn();
         }
     }
 
-    public void updateShoot(boolean isShootTriggered) {
+    private void updateFalling(Array<Platform> platforms) {
+        if (jumpState != JumpState.JUMPING) {
+            if (jumpState != JumpState.RECOILING) {
+                jumpState = JumpState.FALLING;
+            }
 
+            for (Platform platform : platforms) {
+                if (landedOnPlatform(platform)) {
+                    jumpState = JumpState.GROUNDED;
+                    velocity.y = 0;
+                    velocity.x = 0;
+                    position.y = platform.top + Constants.GIGAGAL_EYE_HEIGHT;
+                }
+            }
+        }
     }
 
     /**
@@ -239,15 +258,12 @@ public class GigaGal {
 
     private float bulletPushBack(float delta) {
         float gigagalMoveSpeed = Constants.GIGAGAL_MOVE_SPEED;
-        if (shootButtonPressed) gigagalMoveSpeed -= gigagalMoveSpeed * Constants.BULLET_MOVESPEED_MODIFIER;
+        if (isShooting && canShoot())
+            gigagalMoveSpeed -= Constants.BULLET_KICK;
         return delta * gigagalMoveSpeed;
     }
 
     private void startJump() {
-        if (walkState.equals(WalkState.WALKING)) {
-            if (facing.equals(Direction.RIGHT)) velocity.x = Constants.GIGAGAL_MOVE_SPEED;
-            else velocity.x = -1 * Constants.GIGAGAL_MOVE_SPEED;
-        }
         jumpState = Enums.JumpState.JUMPING;
         jumpStartTime = TimeUtils.nanoTime();
         continueJump();

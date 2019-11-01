@@ -38,7 +38,7 @@ public class Constants {
     public static final String WALKING_LEFT_2 = "walk-2-left";
     public static final String WALKING_RIGHT_3 = "walk-3-right";
     public static final String WALKING_LEFT_3 = "walk-3-left";
-    public static final float WALK_LOOP_DURATION = 0.25f;
+    public static final float WALK_LOOP_DURATION = 0.15f;
 
     // Platform
     public static final String PLATFORM_SPRITE = "platform";
@@ -53,14 +53,13 @@ public class Constants {
     public static final int ENEMY_HEALTH = 20;
     public static final float ENEMY_COLLISION_RADIUS = 15;
     public static final float ENEMY_SHOT_RADIUS = 17;
-    public static final float ENEMY_KICKBACK_MODIFIER = 0.1f;
+    public static final float ENEMY_KICKBACK_MODIFIER = 0.2f;
 
     // Bullet
     public static final String BULLET_SPRITE = "bullet";
     public static final float BULLET_MOVE_SPEED = 350;
     public static final Vector2 BULLET_CENTER = new Vector2(3, 2);
-    public static final float BULLET_KICK = 5;
-    public static final float BULLET_MOVESPEED_MODIFIER = BULLET_KICK * GIGAGAL_FIRERATE / GIGAGAL_MOVE_SPEED;
+    public static final float BULLET_KICK = 125;
 
     // Explosion
     public static final String EXPLOSION_LARGE = "explosion-large";

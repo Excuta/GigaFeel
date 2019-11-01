@@ -127,22 +127,6 @@ public class GigaGal {
                 }
             }
         }
-        // Shoot
-        boolean didShoot = false;
-        boolean shootKeyPressed = Gdx.input.isKeyPressed(Keys.X);
-        isShooting = shootKeyPressed;
-        if (isShooting)
-            Assets.instance.gigaGalAssets.setAnimationSpeed(Constants.BULLET_MOVESPEED_MODIFIER);
-        else Assets.instance.gigaGalAssets.setAnimationSpeed(1);
-
-        if (shootKeyPressed) {
-            didShoot = shoot();
-        }
-        // TODO: 11/1/2019 possible bug, offset with movespeed decrease
-        if (didShoot) {
-            if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
-            else position.x += Constants.BULLET_KICK;
-        }
 
         // Move left/right
         if (jumpState != JumpState.RECOILING) {
@@ -158,7 +142,10 @@ public class GigaGal {
                 walkState = Enums.WalkState.NOT_WALKING;
             }
         }
-
+        if (walkState.equals(WalkState.NOT_WALKING) && isShooting && canShoot()) {
+            if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
+            else position.x += Constants.BULLET_KICK;
+        }
         // Jump
         if (Gdx.input.isKeyPressed(Keys.Z) || jumpButtonPressed) {
             switch (jumpState) {
@@ -171,14 +158,23 @@ public class GigaGal {
         } else {
             endJump();
         }
+        // Shoot
+        boolean shootKeyPressed = Gdx.input.isKeyPressed(Keys.X);
+        isShooting = shootKeyPressed;
+        if (isShooting)
+            Assets.instance.gigaGalAssets.setAnimationSpeed(Constants.BULLET_MOVESPEED_MODIFIER);
+        else Assets.instance.gigaGalAssets.setAnimationSpeed(0);
+
+        if (shootKeyPressed) {
+            shoot();
+        }
     }
 
     /**
      * @return true if shoot successful false otherwise
      */
-    public boolean shoot() {
-        boolean canShoot = canShoot();
-        if (canShoot) {
+    public void shoot() {
+        if (canShoot()) {
             Vector2 bulletPosition;
             if (facing == Direction.RIGHT) {
                 bulletPosition = new Vector2(
@@ -194,7 +190,6 @@ public class GigaGal {
             level.spawnBullet(bulletPosition, facing);
             lastBulletTime = TimeUtils.nanoTime();
         }
-        return canShoot;
     }
 
     private boolean canShoot() {
@@ -232,7 +227,7 @@ public class GigaGal {
 
     private float bulletPushBack(float delta) {
         float gigagalMoveSpeed = Constants.GIGAGAL_MOVE_SPEED;
-        if (isShooting) gigagalMoveSpeed *= Constants.BULLET_MOVESPEED_MODIFIER;
+        if (isShooting) gigagalMoveSpeed -= gigagalMoveSpeed * Constants.BULLET_MOVESPEED_MODIFIER;
         return delta * gigagalMoveSpeed;
     }
 

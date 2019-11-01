@@ -20,8 +20,8 @@ public class Constants {
     public static final float GIGAGAL_STANCE_WIDTH = 19.0f;
     public static final Vector2 GIGAGAL_CANNON_OFFSET = new Vector2(12, -7);
     public static final float GIGAGAL_HEIGHT = 23.0f;
-    public static final float GIGAGAL_MOVE_SPEED = 100;
-    public static final int GIGAGAL_FIRERATE = 10;
+    public static final float GIGAGAL_MOVE_SPEED = 90;
+    public static final int GIGAGAL_FIRERATE = 20;
 
     public static final float JUMP_SPEED = 200;
     public static final Vector2 KNOCKBACK_VELOCITY = new Vector2(200, 200);
@@ -50,7 +50,7 @@ public class Constants {
     public static final float ENEMY_MOVEMENT_SPEED = 10;
     public static final float ENEMY_BOB_AMPLITUDE = 2;
     public static final float ENEMY_BOB_PERIOD = 3.0f;
-    public static final int ENEMY_HEALTH = 5;
+    public static final int ENEMY_HEALTH = 20;
     public static final float ENEMY_COLLISION_RADIUS = 15;
     public static final float ENEMY_SHOT_RADIUS = 17;
 
@@ -58,8 +58,8 @@ public class Constants {
     public static final String BULLET_SPRITE = "bullet";
     public static final float BULLET_MOVE_SPEED = 350;
     public static final Vector2 BULLET_CENTER = new Vector2(3, 2);
-    public static final float BULLET_KICK = 0.5f;
-    public static final float BULLET_MOVESPEED_MODIFIER = 3f/Constants.GIGAGAL_FIRERATE * Constants.BULLET_KICK;
+    public static final float BULLET_KICK = 1;
+    public static final float BULLET_MOVESPEED_MODIFIER = BULLET_KICK * GIGAGAL_FIRERATE / GIGAGAL_MOVE_SPEED*1.5f;
 
     // Explosion
     public static final String EXPLOSION_LARGE = "explosion-large";

@@ -98,8 +98,9 @@ public class Assets implements Disposable, AssetErrorListener {
         }
 
         public void setAnimationSpeed(float modifier) {
-            walkingLeftAnimation.setFrameDuration(Constants.WALK_LOOP_DURATION / modifier);
-            walkingRightAnimation.setFrameDuration(Constants.WALK_LOOP_DURATION / modifier);
+            float walkLoopDuration = Constants.WALK_LOOP_DURATION * (1 + modifier);
+            walkingLeftAnimation.setFrameDuration(walkLoopDuration);
+            walkingRightAnimation.setFrameDuration(walkLoopDuration);
         }
     }
 

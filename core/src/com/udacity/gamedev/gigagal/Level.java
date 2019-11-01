@@ -206,4 +206,12 @@ public class Level {
     public void spawnExplosion(Vector2 position) {
         explosions.add(new Explosion(position));
     }
+
+    public void enemyHit(Enemy enemy) {
+        if (enemy.position.x > gigaGal.getPosition().x){
+            enemy.position.x += Constants.BULLET_KICK;
+        }else {
+            enemy.position.x -= Constants.BULLET_KICK;
+        }
+    }
 }

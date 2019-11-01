@@ -12,14 +12,16 @@ import com.udacity.gamedev.gigagal.util.Utils;
 public class Bullet {
 
     private final Direction direction;
+    private int ySpeed;
     private final Level level;
     public boolean active;
     private Vector2 position;
 
-    public Bullet(Level level, Vector2 position, Direction direction) {
+    public Bullet(Level level, Vector2 position, Direction direction, int ySpeed) {
         this.level = level;
         this.position = position;
         this.direction = direction;
+        this.ySpeed = ySpeed;
         active = true;
     }
 
@@ -32,6 +34,7 @@ public class Bullet {
                 position.x += delta * Constants.BULLET_MOVE_SPEED;
                 break;
         }
+        position.y += delta * ySpeed;
 
         for (Enemy enemy : level.getEnemies()) {
             if (position.dst(enemy.position) < Constants.ENEMY_SHOT_RADIUS) {

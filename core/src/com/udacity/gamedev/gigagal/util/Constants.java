@@ -21,7 +21,7 @@ public class Constants {
     public static final Vector2 GIGAGAL_CANNON_OFFSET = new Vector2(12, -7);
     public static final float GIGAGAL_HEIGHT = 23.0f;
     public static final float GIGAGAL_MOVE_SPEED = 90;
-    public static final int GIGAGAL_FIRERATE = 20;
+    public static final int GIGAGAL_FIRERATE = 15;
 
     public static final float JUMP_SPEED = 200;
     public static final Vector2 KNOCKBACK_VELOCITY = new Vector2(200, 200);
@@ -53,13 +53,14 @@ public class Constants {
     public static final int ENEMY_HEALTH = 20;
     public static final float ENEMY_COLLISION_RADIUS = 15;
     public static final float ENEMY_SHOT_RADIUS = 17;
+    public static final float ENEMY_KICKBACK_MODIFIER = 0.1f;
 
     // Bullet
     public static final String BULLET_SPRITE = "bullet";
     public static final float BULLET_MOVE_SPEED = 350;
     public static final Vector2 BULLET_CENTER = new Vector2(3, 2);
-    public static final float BULLET_KICK = 1;
-    public static final float BULLET_MOVESPEED_MODIFIER = BULLET_KICK * GIGAGAL_FIRERATE / GIGAGAL_MOVE_SPEED*1.5f;
+    public static final float BULLET_KICK = 5;
+    public static final float BULLET_MOVESPEED_MODIFIER = BULLET_KICK * GIGAGAL_FIRERATE / GIGAGAL_MOVE_SPEED;
 
     // Explosion
     public static final String EXPLOSION_LARGE = "explosion-large";
@@ -122,4 +123,5 @@ public class Constants {
     // Scoring
     public static final int ENEMY_KILL_SCORE = 100;
     public static final int ENEMY_HIT_SCORE = 25;
+
 }

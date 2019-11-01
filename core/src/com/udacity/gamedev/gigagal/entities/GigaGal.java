@@ -133,18 +133,27 @@ public class GigaGal {
 
             boolean left = Gdx.input.isKeyPressed(Keys.LEFT) || leftButtonPressed;
             boolean right = Gdx.input.isKeyPressed(Keys.RIGHT) || rightButtonPressed;
-
-            if (left && !right) {
-                move(Direction.LEFT, delta);
-            } else if (right && !left) {
-                move(Direction.RIGHT, delta);
-            } else {
-                walkState = Enums.WalkState.NOT_WALKING;
+            if (jumpState.equals(JumpState.GROUNDED)) {
+                if (left && !right) {
+                    move(Direction.LEFT, delta);
+                } else if (right && !left) {
+                    move(Direction.RIGHT, delta);
+                } else {
+                    walkState = Enums.WalkState.NOT_WALKING;
+                }
             }
         }
         if (walkState.equals(WalkState.NOT_WALKING) && isShooting && canShoot()) {
-            if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
-            else position.x += Constants.BULLET_KICK;
+            if (jumpState.equals(JumpState.GROUNDED)) {
+                if (facing.equals(Direction.RIGHT)) position.x -= Constants.BULLET_KICK;
+                else position.x += Constants.BULLET_KICK;
+            } else {
+                if (facing.equals(Direction.RIGHT)) {
+                    velocity.x -= Constants.BULLET_KICK;
+                } else {
+                    velocity.x += Constants.BULLET_KICK;
+                }
+            }
         }
         // Jump
         if (Gdx.input.isKeyPressed(Keys.Z) || jumpButtonPressed) {
@@ -232,6 +241,10 @@ public class GigaGal {
     }
 
     private void startJump() {
+        if (walkState.equals(WalkState.WALKING)) {
+            if (facing.equals(Direction.RIGHT)) velocity.x = Constants.GIGAGAL_MOVE_SPEED;
+            else velocity.x = -1 * Constants.GIGAGAL_MOVE_SPEED;
+        }
         jumpState = Enums.JumpState.JUMPING;
         jumpStartTime = TimeUtils.nanoTime();
         continueJump();

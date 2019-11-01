@@ -1,6 +1,7 @@
 package com.udacity.gamedev.gigagal;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
@@ -200,7 +201,7 @@ public class Level {
     }
 
     public void spawnBullet(Vector2 position, Direction direction) {
-        bullets.add(new Bullet(this, position, direction));
+        bullets.add(new Bullet(this, position, direction, MathUtils.random(-64, 64)));
     }
 
     public void spawnExplosion(Vector2 position) {
@@ -208,10 +209,10 @@ public class Level {
     }
 
     public void enemyHit(Enemy enemy) {
-        if (enemy.position.x > gigaGal.getPosition().x){
-            enemy.position.x += Constants.BULLET_KICK;
-        }else {
-            enemy.position.x -= Constants.BULLET_KICK;
+        if (enemy.position.x > gigaGal.getPosition().x) {
+            enemy.position.x += Constants.BULLET_KICK * Constants.ENEMY_KICKBACK_MODIFIER;
+        } else {
+            enemy.position.x -= Constants.BULLET_KICK * Constants.ENEMY_KICKBACK_MODIFIER;
         }
     }
 }

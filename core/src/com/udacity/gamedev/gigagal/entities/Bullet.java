@@ -56,6 +56,6 @@ public class Bullet {
 
     public void render(SpriteBatch batch) {
         TextureRegion region = Assets.instance.bulletAssets.bullet;
-        Utils.drawTextureRegion(batch, region, position, Constants.BULLET_CENTER, 1.5f);
+        Utils.drawTextureRegion(batch, region, position, Constants.BULLET_CENTER, 1.75f);
     }
 }

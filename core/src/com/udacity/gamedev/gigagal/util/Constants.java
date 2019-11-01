@@ -48,19 +48,19 @@ public class Constants {
     // Enemy
     public static final String ENEMY_SPRITE = "enemy";
     public static final Vector2 ENEMY_CENTER = new Vector2(14, 22);
-    public static final float ENEMY_MOVEMENT_SPEED = 10;
+    public static final float ENEMY_MOVEMENT_SPEED = 50;
     public static final float ENEMY_BOB_AMPLITUDE = 2;
     public static final float ENEMY_BOB_PERIOD = 3.0f;
-    public static final int ENEMY_HEALTH = 20;
+    public static final int ENEMY_HEALTH = 40;
     public static final float ENEMY_COLLISION_RADIUS = 15;
     public static final float ENEMY_SHOT_RADIUS = 17;
-    public static final float ENEMY_KICKBACK_MODIFIER = 0.2f;
+    public static final float ENEMY_KICKBACK_MODIFIER = 0.25f;
 
     // Bullet
     public static final String BULLET_SPRITE = "bullet";
-    public static final float BULLET_MOVE_SPEED = 350;
+    public static final float BULLET_MOVE_SPEED = 400;
     public static final Vector2 BULLET_CENTER = new Vector2(3, 2);
-    public static final float BULLET_KICK = 125;
+    public static final float BULLET_KICK = 128;
 
     // Explosion
     public static final String EXPLOSION_LARGE = "explosion-large";

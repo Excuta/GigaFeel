@@ -99,7 +99,7 @@ public class GigaGal {
         if (isShooting && canShoot()) {
             shoot();
             bulletKickBack(delta);
-            Assets.instance.gigaGalAssets.shot.play(0.1f);
+            Assets.instance.gigaGalAssets.shot.play(0.1f,MathUtils.random(0.75f,1.5f),0);
         }
     }
 
@@ -176,7 +176,7 @@ public class GigaGal {
                 } else {
                     recoilFromEnemy(Direction.RIGHT);
                 }
-                Assets.instance.gigaGalAssets.hit.play(0.5f);
+                Assets.instance.gigaGalAssets.hit.play(0.5f,MathUtils.random(0.75f,1.5f),0);
             }
         }
     }
@@ -268,7 +268,7 @@ public class GigaGal {
     private void startJump() {
         jumpState = Enums.JumpState.JUMPING;
         jumpStartTime = TimeUtils.nanoTime();
-        Assets.instance.gigaGalAssets.jump.play(0.1f);
+        Assets.instance.gigaGalAssets.jump.play(0.1f,MathUtils.random(0.75f,1.5f),0);
         continueJump();
     }
 

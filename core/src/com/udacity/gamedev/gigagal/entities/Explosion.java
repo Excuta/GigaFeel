@@ -1,6 +1,7 @@
 package com.udacity.gamedev.gigagal.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.udacity.gamedev.gigagal.util.Assets;
@@ -22,7 +23,7 @@ public class Explosion {
 
     public void render(SpriteBatch batch) {
         if (!isFinished() && !yetToStart()) {
-            if (soundId == 0) soundId = Assets.instance.explosionAssets.sound.play(0.1f);
+            if (soundId == 0) soundId = Assets.instance.explosionAssets.sound.play(0.1f, MathUtils.random(0.75f,1.5f),0);
             Utils.drawTextureRegion(
                     batch,
                     Assets.instance.explosionAssets.explosion.getKeyFrame(Utils.secondsSince(startTime) - offset),

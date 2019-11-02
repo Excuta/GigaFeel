@@ -25,6 +25,12 @@ public class Constants {
     public static final float GIGAGAL_HEIGHT = 23.0f;
     public static final float GIGAGAL_MOVE_SPEED = 90;
     public static final int GIGAGAL_FIRERATE = 15;
+    public static final String GIGAGAL_SHOT_SOUND = "sounds/gigagal_shot.wav";
+    public static final String GIGAGAL_JUMP_SOUND = "sounds/gigagal_jump.wav";
+    public static final String GIGAGAL_hit_SOUND = "sounds/hit.wav";
+    public static final String LEVEL_MUSIC = "music/level_music.mp3";
+
+
 
     public static final float JUMP_SPEED = 200;
     public static final Vector2 KNOCKBACK_VELOCITY = new Vector2(200, 200);
@@ -70,6 +76,7 @@ public class Constants {
     public static final String EXPLOSION_SMALL = "explosion-small";
     public static final Vector2 EXPLOSION_CENTER = new Vector2(8, 8);
     public static final float EXPLOSION_DURATION = 0.25f;
+    public static final String EXPLOSION_SOUND = "sounds/explosion.wav";
 
     // Powerup
     public static final String POWERUP_SPRITE = "powerup";

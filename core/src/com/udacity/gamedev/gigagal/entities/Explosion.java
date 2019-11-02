@@ -16,6 +16,7 @@ public class Explosion {
     public Explosion(Vector2 position) {
         this.position = position;
         startTime = TimeUtils.nanoTime();
+        Assets.instance.explosionAssets.sound.play(0.1f);
     }
 
     public void render(SpriteBatch batch) {
@@ -29,7 +30,7 @@ public class Explosion {
         }
     }
 
-    public boolean yetToStart(){
+    public boolean yetToStart() {
         return Utils.secondsSince(startTime) - offset < 0;
     }
 

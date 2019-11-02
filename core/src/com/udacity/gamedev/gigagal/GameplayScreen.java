@@ -133,6 +133,8 @@ public class GameplayScreen extends ScreenAdapter {
         chaseCam.target = level.getGigaGal();
         onscreenControls.gigaGal = level.getGigaGal();
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Assets.instance.levelMusic.play();
+        Assets.instance.levelMusic.setLooping(true);
     }
 
     public void levelComplete() {

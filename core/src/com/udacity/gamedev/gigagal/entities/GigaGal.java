@@ -99,6 +99,7 @@ public class GigaGal {
         if (isShooting && canShoot()) {
             shoot();
             bulletKickBack(delta);
+            Assets.instance.gigaGalAssets.shot.play(0.1f);
         }
     }
 
@@ -175,6 +176,7 @@ public class GigaGal {
                 } else {
                     recoilFromEnemy(Direction.RIGHT);
                 }
+                Assets.instance.gigaGalAssets.hit.play(0.5f);
             }
         }
     }
@@ -266,6 +268,7 @@ public class GigaGal {
     private void startJump() {
         jumpState = Enums.JumpState.JUMPING;
         jumpStartTime = TimeUtils.nanoTime();
+        Assets.instance.gigaGalAssets.jump.play(0.1f);
         continueJump();
     }
 

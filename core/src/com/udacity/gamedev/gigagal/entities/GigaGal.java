@@ -268,7 +268,7 @@ public class GigaGal {
     private void startJump() {
         jumpState = Enums.JumpState.JUMPING;
         jumpStartTime = TimeUtils.nanoTime();
-        Assets.instance.gigaGalAssets.jump.play(0.1f,MathUtils.random(0.75f,1.5f),0);
+        Assets.instance.gigaGalAssets.jump.play(0.1f,MathUtils.random(0.5f,0.9f),0);
         continueJump();
     }
 

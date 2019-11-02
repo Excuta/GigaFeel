@@ -12,8 +12,8 @@ public class Constants {
     public static final float GRAVITY = 10;
     public static final float CHASE_CAM_MOVE_SPEED = WORLD_SIZE;
     public static final float CHASE_CAM_DIRECTION_OFFSET = WORLD_SIZE / 8;
-    public static final float CHASE_CAM_SHAKE = WORLD_SIZE/8;
-    public static final float CHASE_CAM_ACCELERATION = WORLD_SIZE/4;
+    public static final float CHASE_CAM_SHAKE = WORLD_SIZE / 8;
+    public static final float CHASE_CAM_ACCELERATION = WORLD_SIZE / 4;
     public static final float CHASE_CAM_MAX_SPEED = WORLD_SIZE;
     public static final String TEXTURE_ATLAS = "images/gigagal.pack.atlas";
 
@@ -29,7 +29,6 @@ public class Constants {
     public static final String GIGAGAL_JUMP_SOUND = "sounds/gigagal_jump.wav";
     public static final String GIGAGAL_hit_SOUND = "sounds/hit.wav";
     public static final String LEVEL_MUSIC = "music/level_music.mp3";
-
 
 
     public static final float JUMP_SPEED = 200;
@@ -132,5 +131,12 @@ public class Constants {
     // Scoring
     public static final int ENEMY_KILL_SCORE = 100;
     public static final int ENEMY_HIT_SCORE = 25;
+
+    //SlowMo
+    public static final float HIT_SLOW_MO_DURATION = 0.016f;
+    public static final float HIT_SLOW_MO_RATE = 0.0001f;
+
+    public static final float ENEMY_DEATH_SLOW_MO_DURATION = 0.08f;
+    public static final float ENEMY_DEATH_SLOW_MO_RATE = 0.01f;
 
 }

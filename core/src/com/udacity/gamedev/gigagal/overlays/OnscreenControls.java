@@ -84,6 +84,10 @@ public class OnscreenControls extends InputAdapter {
             gigaGal.leftButtonPressed = true;
         }
 
+        if (pointer == shootPointer) {
+            gigaGal.jumpButtonPressed = viewportPosition.dst(jumpCenter) < Constants.BUTTON_RADIUS;
+        }
+
         return super.touchDragged(screenX, screenY, pointer);
     }
 

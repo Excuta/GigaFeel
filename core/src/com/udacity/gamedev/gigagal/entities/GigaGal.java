@@ -99,7 +99,7 @@ public class GigaGal {
         if (isShooting && canShoot()) {
             shoot();
             bulletKickBack(delta);
-            Assets.instance.gigaGalAssets.shot.play(0.1f,MathUtils.random(0.75f,1.5f),0);
+            Assets.instance.gigaGalAssets.shot.play(0.1f, MathUtils.random(0.75f, 1.5f), 0);
         }
     }
 
@@ -176,7 +176,7 @@ public class GigaGal {
                 } else {
                     recoilFromEnemy(Direction.RIGHT);
                 }
-                Assets.instance.gigaGalAssets.hit.play(0.5f,MathUtils.random(0.75f,1.5f),0);
+                Assets.instance.gigaGalAssets.hit.play(0.5f, MathUtils.random(0.75f, 1.5f), 0);
             }
         }
     }
@@ -252,23 +252,26 @@ public class GigaGal {
             walkStartTime = TimeUtils.nanoTime();
         }
         walkState = Enums.WalkState.WALKING;
-        facing = direction;
-        float xDiff = bulletPushBack(delta);
+        if (!isShooting) facing = direction;
+        float xDiff = bulletPushBack(delta,direction, facing);
         if (direction.equals(Direction.RIGHT)) position.x += xDiff;
         else position.x -= xDiff;
     }
 
-    private float bulletPushBack(float delta) {
+    private float bulletPushBack(float delta, Direction direction, Direction facing) {
         float gigagalMoveSpeed = Constants.GIGAGAL_MOVE_SPEED;
-        if (isShooting && canShoot())
-            gigagalMoveSpeed -= Constants.BULLET_KICK;
+        if (isShooting && canShoot()){
+            if (direction.equals(facing)) gigagalMoveSpeed -= Constants.BULLET_KICK;
+            else gigagalMoveSpeed += Constants.BULLET_KICK;
+
+        }
         return delta * gigagalMoveSpeed;
     }
 
     private void startJump() {
         jumpState = Enums.JumpState.JUMPING;
         jumpStartTime = TimeUtils.nanoTime();
-        Assets.instance.gigaGalAssets.jump.play(0.1f,MathUtils.random(0.5f,0.9f),0);
+        Assets.instance.gigaGalAssets.jump.play(0.1f, MathUtils.random(0.5f, 0.9f), 0);
         continueJump();
     }
 

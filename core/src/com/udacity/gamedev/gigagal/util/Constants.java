@@ -57,8 +57,8 @@ public class Constants {
     public static final String ENEMY_SPRITE = "enemy";
     public static final Vector2 ENEMY_CENTER = new Vector2(14, 22);
     public static final float ENEMY_MOVEMENT_SPEED = 50;
-    public static final float ENEMY_BOB_AMPLITUDE = 2;
-    public static final float ENEMY_BOB_PERIOD = 3.0f;
+    public static final float ENEMY_BOB_AMPLITUDE = 3;
+    public static final float ENEMY_BOB_PERIOD = 2.0f;
     public static final int ENEMY_HEALTH = 40;
     public static final float ENEMY_COLLISION_RADIUS = 15;
     public static final float ENEMY_SHOT_RADIUS = 17;

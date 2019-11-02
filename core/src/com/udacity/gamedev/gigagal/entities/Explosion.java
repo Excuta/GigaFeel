@@ -13,14 +13,16 @@ public class Explosion {
     private final long startTime;
     public float offset = 0;
 
+    public long soundId = 0;
+
     public Explosion(Vector2 position) {
         this.position = position;
         startTime = TimeUtils.nanoTime();
-        Assets.instance.explosionAssets.sound.play(0.1f);
     }
 
     public void render(SpriteBatch batch) {
         if (!isFinished() && !yetToStart()) {
+            if (soundId == 0) soundId = Assets.instance.explosionAssets.sound.play(0.1f);
             Utils.drawTextureRegion(
                     batch,
                     Assets.instance.explosionAssets.explosion.getKeyFrame(Utils.secondsSince(startTime) - offset),

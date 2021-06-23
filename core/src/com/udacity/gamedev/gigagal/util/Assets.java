@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -29,6 +31,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
     private AssetManager assetManager;
 
+    public Music levelMusic;
+
 
     private Assets() {
     }
@@ -48,6 +52,8 @@ public class Assets implements Disposable, AssetErrorListener {
         powerupAssets = new PowerupAssets(atlas);
         exitPortalAssets = new ExitPortalAssets(atlas);
         onscreenControlsAssets = new OnscreenControlsAssets(atlas);
+        levelMusic = Gdx.audio.newMusic(Gdx.files.internal(Constants.LEVEL_MUSIC));
+        levelMusic.setVolume(0.25f);
     }
 
     @Override
@@ -72,6 +78,10 @@ public class Assets implements Disposable, AssetErrorListener {
         public final Animation walkingLeftAnimation;
         public final Animation walkingRightAnimation;
 
+        public final Sound shot;
+        public final Sound jump;
+        public final Sound hit;
+
 
         public GigaGalAssets(TextureAtlas atlas) {
             standingLeft = atlas.findRegion(Constants.STANDING_LEFT);
@@ -95,6 +105,16 @@ public class Assets implements Disposable, AssetErrorListener {
             walkingRightFrames.add(atlas.findRegion(Constants.WALKING_RIGHT_2));
             walkingRightFrames.add(atlas.findRegion(Constants.WALKING_RIGHT_3));
             walkingRightAnimation = new Animation(Constants.WALK_LOOP_DURATION, walkingRightFrames, PlayMode.LOOP);
+
+            shot = Gdx.audio.newSound(Gdx.files.internal(Constants.GIGAGAL_SHOT_SOUND));
+            jump = Gdx.audio.newSound(Gdx.files.internal(Constants.GIGAGAL_JUMP_SOUND));
+            hit = Gdx.audio.newSound(Gdx.files.internal(Constants.GIGAGAL_hit_SOUND));
+        }
+
+        public void setAnimationSpeed(float modifier) {
+            float walkLoopDuration = Constants.WALK_LOOP_DURATION * (1 + modifier);
+            walkingLeftAnimation.setFrameDuration(walkLoopDuration);
+            walkingRightAnimation.setFrameDuration(walkLoopDuration);
         }
     }
 
@@ -131,6 +151,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public class ExplosionAssets {
 
         public final Animation explosion;
+        public final Sound sound;
 
         public ExplosionAssets(TextureAtlas atlas) {
 
@@ -141,6 +162,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
             explosion = new Animation(Constants.EXPLOSION_DURATION / explosionRegions.size,
                     explosionRegions, PlayMode.NORMAL);
+            sound = Gdx.audio.newSound(Gdx.files.internal(Constants.EXPLOSION_SOUND));
+
         }
     }
 
@@ -187,5 +210,4 @@ public class Assets implements Disposable, AssetErrorListener {
 
 
     }
-
 }

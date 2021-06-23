@@ -1,9 +1,11 @@
 package com.udacity.gamedev.gigagal;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.udacity.gamedev.gigagal.entities.Bullet;
@@ -15,6 +17,7 @@ import com.udacity.gamedev.gigagal.entities.Platform;
 import com.udacity.gamedev.gigagal.entities.Powerup;
 import com.udacity.gamedev.gigagal.util.Constants;
 import com.udacity.gamedev.gigagal.util.Enums.Direction;
+import com.udacity.gamedev.gigagal.util.Utils;
 
 public class Level {
 
@@ -30,6 +33,8 @@ public class Level {
     private DelayedRemovalArray<Bullet> bullets;
     private DelayedRemovalArray<Explosion> explosions;
     private DelayedRemovalArray<Powerup> powerups;
+    private long hitSlowMoStart;
+    private long deathSlowMoStart;
 
     public Level() {
         viewport = new ExtendViewport(Constants.WORLD_SIZE, Constants.WORLD_SIZE);
@@ -56,8 +61,11 @@ public class Level {
     }
 
     public void update(float delta) {
-
-
+        if (Utils.secondsSince(deathSlowMoStart) <= Constants.ENEMY_DEATH_SLOW_MO_DURATION) {
+            delta *= Constants.ENEMY_DEATH_SLOW_MO_RATE;
+        } else if (Utils.secondsSince(hitSlowMoStart) <= Constants.HIT_SLOW_MO_DURATION) {
+            delta *= Constants.HIT_SLOW_MO_RATE;
+        }
         if (gigaGal.getLives() < 0) {
             gameOver = true;
         } else if (gigaGal.getPosition().dst(exitPortal.position) < Constants.EXIT_PORTAL_RADIUS) {
@@ -87,6 +95,7 @@ public class Level {
                     spawnExplosion(enemy.position);
                     enemies.removeIndex(i);
                     score += Constants.ENEMY_KILL_SCORE;
+                    deathSlowMoStart = TimeUtils.nanoTime();
                 }
             }
             enemies.end();
@@ -200,10 +209,21 @@ public class Level {
     }
 
     public void spawnBullet(Vector2 position, Direction direction) {
-        bullets.add(new Bullet(this, position, direction));
+        bullets.add(new Bullet(this, position, direction, MathUtils.random(-64, 64)));
     }
 
     public void spawnExplosion(Vector2 position) {
         explosions.add(new Explosion(position));
+    }
+
+    public void enemyHit(Enemy enemy, float delta) {
+        Direction hitDirection;
+        if (enemy.position.x > gigaGal.getPosition().x) {
+            hitDirection = Direction.LEFT;
+        } else {
+            hitDirection = Direction.RIGHT;
+        }
+        enemy.updateHitFrom(hitDirection, delta);
+        hitSlowMoStart = TimeUtils.nanoTime();
     }
 }

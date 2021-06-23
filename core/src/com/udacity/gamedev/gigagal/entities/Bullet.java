@@ -12,14 +12,16 @@ import com.udacity.gamedev.gigagal.util.Utils;
 public class Bullet {
 
     private final Direction direction;
+    private float ySpeed;
     private final Level level;
     public boolean active;
     private Vector2 position;
 
-    public Bullet(Level level, Vector2 position, Direction direction) {
+    public Bullet(Level level, Vector2 position, Direction direction, float ySpeed) {
         this.level = level;
         this.position = position;
         this.direction = direction;
+        this.ySpeed = ySpeed;
         active = true;
     }
 
@@ -32,12 +34,14 @@ public class Bullet {
                 position.x += delta * Constants.BULLET_MOVE_SPEED;
                 break;
         }
+        position.y += delta * ySpeed;
 
         for (Enemy enemy : level.getEnemies()) {
             if (position.dst(enemy.position) < Constants.ENEMY_SHOT_RADIUS) {
                 level.spawnExplosion(position);
                 active = false;
                 enemy.health -= 1;
+                level.enemyHit(enemy, delta);
                 level.score += Constants.ENEMY_HIT_SCORE;
             }
         }
@@ -52,6 +56,6 @@ public class Bullet {
 
     public void render(SpriteBatch batch) {
         TextureRegion region = Assets.instance.bulletAssets.bullet;
-        Utils.drawTextureRegion(batch, region, position, Constants.BULLET_CENTER);
+        Utils.drawTextureRegion(batch, region, position, Constants.BULLET_CENTER, 1.75f);
     }
 }

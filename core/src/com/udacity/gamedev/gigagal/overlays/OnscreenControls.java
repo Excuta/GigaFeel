@@ -25,6 +25,7 @@ public class OnscreenControls extends InputAdapter {
     private int moveLeftPointer;
     private int moveRightPointer;
     private int jumpPointer;
+    private int shootPointer;
 
     public OnscreenControls() {
         this.viewport = new ExtendViewport(
@@ -47,7 +48,8 @@ public class OnscreenControls extends InputAdapter {
         Vector2 viewportPosition = viewport.unproject(new Vector2(screenX, screenY));
 
         if (viewportPosition.dst(shootCenter) < Constants.BUTTON_RADIUS) {
-            gigaGal.shoot();
+            shootPointer = pointer;
+            gigaGal.shootButtonPressed = true;
         } else if (viewportPosition.dst(jumpCenter) < Constants.BUTTON_RADIUS) {
             jumpPointer = pointer;
             gigaGal.jumpButtonPressed = true;
@@ -82,6 +84,10 @@ public class OnscreenControls extends InputAdapter {
             gigaGal.leftButtonPressed = true;
         }
 
+        if (pointer == shootPointer) {
+            gigaGal.jumpButtonPressed = viewportPosition.dst(jumpCenter) < Constants.BUTTON_RADIUS;
+        }
+
         return super.touchDragged(screenX, screenY, pointer);
     }
 
@@ -93,6 +99,10 @@ public class OnscreenControls extends InputAdapter {
 
         if (!Gdx.input.isTouched(jumpPointer)) {
             gigaGal.jumpButtonPressed = false;
+            jumpPointer = 0;
+        }
+        if (!Gdx.input.isTouched(shootPointer)) {
+            gigaGal.shootButtonPressed = false;
             jumpPointer = 0;
         }
 

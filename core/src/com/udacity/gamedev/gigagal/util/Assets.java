@@ -53,6 +53,7 @@ public class Assets implements Disposable, AssetErrorListener {
         exitPortalAssets = new ExitPortalAssets(atlas);
         onscreenControlsAssets = new OnscreenControlsAssets(atlas);
         levelMusic = Gdx.audio.newMusic(Gdx.files.internal(Constants.LEVEL_MUSIC));
+        levelMusic.setVolume(0.25f);
     }
 
     @Override

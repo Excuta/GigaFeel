@@ -27,7 +27,7 @@ public class Constants {
     public static final int GIGAGAL_FIRERATE = 15;
     public static final String GIGAGAL_SHOT_SOUND = "sounds/gigagal_shot.wav";
     public static final String GIGAGAL_JUMP_SOUND = "sounds/gigagal_jump.wav";
-    public static final String GIGAGAL_hit_SOUND = "sounds/hit.wav";
+    public static final String GIGAGAL_hit_SOUND = "sounds/hit.mp3";
     public static final String LEVEL_MUSIC = "music/level_music.mp3";
 
 

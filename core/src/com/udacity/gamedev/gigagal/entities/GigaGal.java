@@ -65,9 +65,9 @@ public class GigaGal {
         position.set(spawnLocation);
         lastFramePosition.set(spawnLocation);
         velocity.setZero();
-        jumpState = Enums.JumpState.FALLING;
+        jumpState = JumpState.FALLING;
         facing = Direction.RIGHT;
-        walkState = Enums.WalkState.NOT_WALKING;
+        walkState = WalkState.NOT_WALKING;
         lastBulletTime = 0;
         shootButtonPressed = false;
 
@@ -99,7 +99,7 @@ public class GigaGal {
         if (isShooting && canShoot()) {
             shoot();
             bulletKickBack(delta);
-            Assets.instance.gigaGalAssets.shot.play(0.1f, MathUtils.random(0.75f, 1.5f), 0);
+            Assets.instance.gigaGalAssets.shot.play(0.6f, MathUtils.random(0.75f, 1.5f), 0);
         }
     }
 
@@ -248,10 +248,10 @@ public class GigaGal {
     }
 
     private void move(Direction direction, float delta) {
-        if (jumpState == Enums.JumpState.GROUNDED && walkState != Enums.WalkState.WALKING) {
+        if (jumpState == JumpState.GROUNDED && walkState != WalkState.WALKING) {
             walkStartTime = TimeUtils.nanoTime();
         }
-        walkState = Enums.WalkState.WALKING;
+        walkState = WalkState.WALKING;
         if (!isShooting) facing = direction;
         float xDiff = bulletPushBack(delta,direction, facing);
         if (direction.equals(Direction.RIGHT)) position.x += xDiff;
@@ -269,14 +269,14 @@ public class GigaGal {
     }
 
     private void startJump() {
-        jumpState = Enums.JumpState.JUMPING;
+        jumpState = JumpState.JUMPING;
         jumpStartTime = TimeUtils.nanoTime();
-        Assets.instance.gigaGalAssets.jump.play(0.1f, MathUtils.random(0.5f, 0.9f), 0);
+        Assets.instance.gigaGalAssets.jump.play(0.8f, MathUtils.random(0.5f, 0.9f), 0);
         continueJump();
     }
 
     private void continueJump() {
-        if (jumpState == Enums.JumpState.JUMPING) {
+        if (jumpState == JumpState.JUMPING) {
             if (Utils.secondsSince(jumpStartTime) < Constants.MAX_JUMP_DURATION) {
                 velocity.y = Constants.JUMP_SPEED;
             } else {
@@ -286,8 +286,8 @@ public class GigaGal {
     }
 
     private void endJump() {
-        if (jumpState == Enums.JumpState.JUMPING) {
-            jumpState = Enums.JumpState.FALLING;
+        if (jumpState == JumpState.JUMPING) {
+            jumpState = JumpState.FALLING;
         }
     }
 
@@ -306,20 +306,20 @@ public class GigaGal {
     public void render(SpriteBatch batch) {
         TextureRegion region = Assets.instance.gigaGalAssets.standingRight;
 
-        if (facing == Direction.RIGHT && jumpState != Enums.JumpState.GROUNDED) {
+        if (facing == Direction.RIGHT && jumpState != JumpState.GROUNDED) {
             region = Assets.instance.gigaGalAssets.jumpingRight;
-        } else if (facing == Direction.RIGHT && walkState == Enums.WalkState.NOT_WALKING) {
+        } else if (facing == Direction.RIGHT && walkState == WalkState.NOT_WALKING) {
             region = Assets.instance.gigaGalAssets.standingRight;
-        } else if (facing == Direction.RIGHT && walkState == Enums.WalkState.WALKING) {
+        } else if (facing == Direction.RIGHT && walkState == WalkState.WALKING) {
             float walkTimeSeconds = Utils.secondsSince(walkStartTime);
-            region = Assets.instance.gigaGalAssets.walkingRightAnimation.getKeyFrame(walkTimeSeconds);
-        } else if (facing == Direction.LEFT && jumpState != Enums.JumpState.GROUNDED) {
+            region = (TextureRegion) Assets.instance.gigaGalAssets.walkingRightAnimation.getKeyFrame(walkTimeSeconds);
+        } else if (facing == Direction.LEFT && jumpState != JumpState.GROUNDED) {
             region = Assets.instance.gigaGalAssets.jumpingLeft;
-        } else if (facing == Direction.LEFT && walkState == Enums.WalkState.NOT_WALKING) {
+        } else if (facing == Direction.LEFT && walkState == WalkState.NOT_WALKING) {
             region = Assets.instance.gigaGalAssets.standingLeft;
-        } else if (facing == Direction.LEFT && walkState == Enums.WalkState.WALKING) {
+        } else if (facing == Direction.LEFT && walkState == WalkState.WALKING) {
             float walkTimeSeconds = Utils.secondsSince(walkStartTime);
-            region = Assets.instance.gigaGalAssets.walkingLeftAnimation.getKeyFrame(walkTimeSeconds);
+            region = (TextureRegion) Assets.instance.gigaGalAssets.walkingLeftAnimation.getKeyFrame(walkTimeSeconds);
         }
 
         Utils.drawTextureRegion(batch, region, position, Constants.GIGAGAL_EYE_POSITION);
